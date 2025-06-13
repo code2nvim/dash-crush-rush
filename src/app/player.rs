@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::cfg::player::default::*;
+use super::cfg::player::*;
 
 #[derive(Component)]
 pub struct Player;
@@ -13,8 +13,8 @@ pub fn spawn_player(
     commands.spawn((
         Player,
         (
-            Mesh3d(meshes.add(Sphere::new(RADIUS))),
-            MeshMaterial3d(materials.add(COLOR)),
+            Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
+            MeshMaterial3d(materials.add(default::COLOR)),
             Transform::from_xyz(0.0, 0.0, 0.0),
         ),
     ));

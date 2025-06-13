@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use super::cfg::ground::default::*;
+use super::cfg::ground::*;
 
 #[derive(Component)]
 pub struct Ground;
