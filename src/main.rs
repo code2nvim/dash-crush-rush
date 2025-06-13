@@ -1,3 +1,7 @@
+mod app;
+
+use app::*;
+
 use bevy::prelude::*;
 
 fn main() {
@@ -10,5 +14,6 @@ fn main() {
             }),
             ..default()
         }))
+        .add_systems(Startup, (spawn_camera, spawn_ground, spawn_player))
         .run();
 }
