@@ -5,7 +5,7 @@ pub mod camera {
 }
 
 pub mod ground {
-    pub const SIZE: (f32, f32) = (20.0, 20.0);
+    pub const SIZE: f32 = 20.0;
     pub const COLOR: crate::Color = crate::Color::srgb(0.3, 0.5, 0.3);
 }
 

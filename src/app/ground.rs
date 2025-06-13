@@ -1,6 +1,6 @@
-use bevy::prelude::*;
-
 use super::cfg::ground::*;
+
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Ground;
@@ -13,7 +13,7 @@ pub fn spawn_ground(
     commands.spawn((
         Ground,
         (
-            Mesh3d(meshes.add(Plane3d::default().mesh().size(SIZE.0, SIZE.1))),
+            Mesh3d(meshes.add(Plane3d::default().mesh().size(SIZE, SIZE))),
             MeshMaterial3d(materials.add(COLOR)),
         ),
     ));

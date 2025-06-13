@@ -1,6 +1,6 @@
-use bevy::prelude::*;
-
 use super::cfg::camera::*;
+
+use bevy::prelude::*;
 
 #[derive(Component)]
 pub struct Camera;
