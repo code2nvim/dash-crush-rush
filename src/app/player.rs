@@ -24,21 +24,19 @@ pub fn move_player(
     time: Res<Time>,
     mut transform: Query<&mut Transform, With<Player>>,
 ) {
-    let mut direction = Vec3::ZERO;
-    if key.pressed(KeyCode::KeyW) {
-        direction += Vec3::new(0.0, 0.0, -1.0);
-    }
-    if key.pressed(KeyCode::KeyA) {
-        direction += Vec3::new(-1.0, 0.0, 0.0);
-    }
-    if key.pressed(KeyCode::KeyS) {
-        direction += Vec3::new(0.0, 0.0, 1.0);
-    }
-    if key.pressed(KeyCode::KeyD) {
-        direction += Vec3::new(1.0, 0.0, 0.0);
-    }
-    let Ok(mut transform) = transform.single_mut() else {
-        return;
+    if let Ok(mut transform) = transform.single_mut() {
+        let distance = time.delta_secs() * default::SPEED;
+        if key.pressed(KeyCode::KeyW) {
+            transform.translation.z -= distance;
+        }
+        if key.pressed(KeyCode::KeyA) {
+            transform.translation.x -= distance;
+        }
+        if key.pressed(KeyCode::KeyS) {
+            transform.translation.z += distance;
+        }
+        if key.pressed(KeyCode::KeyD) {
+            transform.translation.x += distance;
+        }
     };
-    transform.translation += direction * time.delta_secs() * 10.0;
 }
