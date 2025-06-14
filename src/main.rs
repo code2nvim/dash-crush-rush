@@ -14,7 +14,10 @@ fn main() {
             }),
             ..default()
         }))
-        .add_systems(Startup, (spawn_camera, spawn_ground, spawn_player))
+        .add_systems(
+            Startup,
+            (spawn_camera, spawn_ground, spawn_light, spawn_player),
+        )
         .add_systems(Update, move_player)
         .run();
 }
