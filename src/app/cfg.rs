@@ -1,6 +1,6 @@
 pub mod camera {
     pub mod default {
-        pub const POS: (f32, f32, f32) = (0.0, 30.0, 10.0);
+        pub const POS: (f32, f32, f32) = (0.0, 30.0, 20.0);
     }
 }
 
@@ -19,5 +19,8 @@ pub mod player {
         pub const RADIUS: f32 = 1.0;
         pub const COLOR: crate::Color = crate::Color::srgb(0.5, 0.5, 0.5);
         pub const SPEED: f32 = 10.0;
+    }
+    pub mod glasses {
+        pub const COLOR: crate::Color = crate::Color::BLACK;
     }
 }

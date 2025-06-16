@@ -10,15 +10,24 @@ pub fn spawn_player(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    commands.spawn((
-        Player,
-        (
-            Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
-            MeshMaterial3d(materials.add(default::COLOR)),
-            Transform::from_xyz(0.0, 0.0, 0.0),
-        ),
-    ));
+    commands
+        .spawn((
+            Player,
+            (
+                Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
+                MeshMaterial3d(materials.add(default::COLOR)),
+                Transform::from_xyz(0.0, 0.0, 0.0),
+            ),
+        ))
+        .with_children(|parent| {
+            parent.spawn((
+                Mesh3d(meshes.add(Cuboid::new(1.6, 0.8, 0.1))),
+                MeshMaterial3d(materials.add(glasses::COLOR)),
+                Transform::from_xyz(0.0, 0.4, 0.8),
+            ));
+        });
 }
+
 pub fn move_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
