@@ -10,6 +10,6 @@ impl Plugin for GamePlugin {
             Startup,
             (spawn_camera, spawn_ground, spawn_light, spawn_player),
         )
-        .add_systems(Update, move_player);
+        .add_systems(Update, (move_player, rotate_player));
     }
 }

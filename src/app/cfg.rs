@@ -1,6 +1,6 @@
 pub mod camera {
     pub mod default {
-        pub const POS: (f32, f32, f32) = (0.0, 30.0, 20.0);
+        pub const POS: (f32, f32, f32) = (0.0, 30.0, 30.0);
     }
 }
 
