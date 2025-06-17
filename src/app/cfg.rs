@@ -20,7 +20,9 @@ pub mod player {
         pub const COLOR: crate::Color = crate::Color::srgb(0.5, 0.5, 0.5);
         pub const SPEED: f32 = 10.0;
     }
-    pub mod glasses {
+    pub mod gear {
         pub const COLOR: crate::Color = crate::Color::BLACK;
+        pub const SIZE: (f32, f32, f32) = (1.6, 0.8, 0.1);
+        pub const POS: (f32, f32, f32) = (0.0, 0.4, 0.8);
     }
 }

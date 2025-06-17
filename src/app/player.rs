@@ -21,9 +21,9 @@ pub fn spawn_player(
         ))
         .with_children(|parent| {
             parent.spawn((
-                Mesh3d(meshes.add(Cuboid::new(1.6, 0.8, 0.1))),
-                MeshMaterial3d(materials.add(glasses::COLOR)),
-                Transform::from_xyz(0.0, 0.4, 0.8),
+                Mesh3d(meshes.add(Cuboid::new(gear::SIZE.0, gear::SIZE.1, gear::SIZE.2))),
+                MeshMaterial3d(materials.add(gear::COLOR)),
+                Transform::from_xyz(gear::POS.0, gear::POS.1, gear::POS.2),
             ));
         });
 }
