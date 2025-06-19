@@ -34,16 +34,16 @@ pub fn move_player(
     mut transform: Single<&mut Transform, With<Player>>,
 ) {
     let (mut x, y, mut z): (f32, f32, f32) = (0.0, 0.0, 0.0);
-    if key.pressed(KeyCode::KeyW) {
+    if key.pressed(cfg::bind::MOV_F) {
         z = -1.0;
     }
-    if key.pressed(KeyCode::KeyA) {
+    if key.pressed(cfg::bind::MOV_L) {
         x = -1.0;
     }
-    if key.pressed(KeyCode::KeyS) {
+    if key.pressed(cfg::bind::MOV_B) {
         z += 1.0;
     }
-    if key.pressed(KeyCode::KeyD) {
+    if key.pressed(cfg::bind::MOV_R) {
         x += 1.0;
     }
     transform.translation += if x.abs() == 1.0 && z.abs() == 1.0 {

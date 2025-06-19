@@ -1,3 +1,11 @@
+pub mod bind {
+    pub const FIRE: crate::MouseButton = crate::MouseButton::Left;
+    pub const MOV_F: crate::KeyCode = crate::KeyCode::KeyW;
+    pub const MOV_L: crate::KeyCode = crate::KeyCode::KeyA;
+    pub const MOV_B: crate::KeyCode = crate::KeyCode::KeyS;
+    pub const MOV_R: crate::KeyCode = crate::KeyCode::KeyD;
+}
+
 pub mod bullet {
     pub const RADIUS: f32 = 0.2;
     pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 0.5);

@@ -17,7 +17,7 @@ pub fn fire_bullet(
     mouse: Res<ButtonInput<MouseButton>>,
     player: Single<&GlobalTransform, With<Player>>,
 ) {
-    if !mouse.pressed(MouseButton::Left) {
+    if !mouse.pressed(cfg::bind::FIRE) {
         timer.0.reset();
         return;
     }
