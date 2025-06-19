@@ -1,3 +1,9 @@
+pub mod bullet {
+    pub const RADIUS: f32 = 0.2;
+    pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 0.5);
+    pub const INTERVAL: f32 = 0.2;
+}
+
 pub mod camera {
     pub mod default {
         pub const POS: (f32, f32, f32) = (0.0, 30.0, 30.0);

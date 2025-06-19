@@ -6,10 +6,12 @@ pub struct GamePlugin;
 
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-            Startup,
-            (spawn_camera, spawn_ground, spawn_light, spawn_player),
-        )
-        .add_systems(Update, (move_player, rotate_player));
+        app.add_systems(Startup, spawn_player)
+            .add_systems(Update, (move_player, rotate_player))
+            .add_systems(Update, fire_bullet)
+            .insert_resource(FireTimer(Timer::from_seconds(
+                cfg::bullet::INTERVAL,
+                TimerMode::Repeating,
+            )));
     }
 }
