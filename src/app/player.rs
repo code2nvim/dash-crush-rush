@@ -53,27 +53,7 @@ pub fn move_player(
     };
 }
 
-pub fn rotate_player(
-    camera: Single<(&Camera, &GlobalTransform)>,
-    ground: Single<&GlobalTransform, With<Ground>>,
-    window: Single<&Window>,
-    mut player: Query<&mut Transform, With<Player>>,
-) {
-    let (camera, transform) = *camera;
-    let Some(position) = window.cursor_position() else {
-        return;
-    };
-    let Ok(ray) = camera.viewport_to_world(transform, position) else {
-        return;
-    };
-    let Ok(mut player) = player.single_mut() else {
-        return;
-    };
-    let Some(distance) =
-        ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
-    else {
-        return;
-    };
-    let direction = ray.get_point(distance) - player.translation;
+pub fn rotate_player(cursor: Single<&Cursor>, mut player: Single<&mut Transform, With<Player>>) {
+    let direction = cursor.0 - player.translation;
     player.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
 }
