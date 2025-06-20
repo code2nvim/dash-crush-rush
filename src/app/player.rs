@@ -33,24 +33,20 @@ pub fn move_player(
     time: Res<Time>,
     mut transform: Single<&mut Transform, With<Player>>,
 ) {
-    let (mut x, y, mut z): (f32, f32, f32) = (0.0, 0.0, 0.0);
+    let mut direction = Vec3::new(0.0, 0.0, 0.0);
     if key.pressed(cfg::bind::MOV_F) {
-        z = -1.0;
+        direction.z -= 1.0;
     }
     if key.pressed(cfg::bind::MOV_L) {
-        x = -1.0;
+        direction.x -= 1.0;
     }
     if key.pressed(cfg::bind::MOV_B) {
-        z += 1.0;
+        direction.z += 1.0;
     }
     if key.pressed(cfg::bind::MOV_R) {
-        x += 1.0;
+        direction.x += 1.0;
     }
-    transform.translation += if x.abs() == 1.0 && z.abs() == 1.0 {
-        Vec3::new(x, y, z) * default::SPEED * time.delta_secs() / f32::sqrt(2.0)
-    } else {
-        Vec3::new(x, y, z) * default::SPEED * time.delta_secs()
-    };
+    transform.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs()
 }
 
 pub fn rotate_player(cursor: Res<Cursor>, mut player: Single<&mut Transform, With<Player>>) {
