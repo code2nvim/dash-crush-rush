@@ -18,8 +18,7 @@ pub fn fire_bullet(
     player: Single<&GlobalTransform, With<Player>>,
 ) {
     if !mouse.pressed(cfg::bind::FIRE) {
-        timer.0.reset();
-        return;
+        return timer.0.reset();
     }
     if timer.0.tick(time.delta()).just_finished() {
         let player = player.translation();
