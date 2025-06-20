@@ -53,7 +53,7 @@ pub fn move_player(
     };
 }
 
-pub fn rotate_player(cursor: Single<&Cursor>, mut player: Single<&mut Transform, With<Player>>) {
+pub fn rotate_player(cursor: Res<Cursor>, mut player: Single<&mut Transform, With<Player>>) {
     let direction = cursor.0 - player.translation;
     player.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
 }
