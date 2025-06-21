@@ -15,17 +15,17 @@ pub fn fire_bullet(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut timer: ResMut<Fire>,
+    mut fire: ResMut<Fire>,
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
     player: Single<(&Player, &Transform)>,
 ) {
     if !mouse.pressed(cfg::bind::FIRE) {
-        timer.first = true;
-        return timer.timer.reset();
+        fire.first = true;
+        return fire.timer.reset();
     }
-    if timer.timer.tick(time.delta()).finished() || timer.first {
-        timer.first = false;
+    if fire.timer.tick(time.delta()).finished() || fire.first {
+        fire.first = false;
         let (player, transform) = player.into_inner();
         let pos = transform.translation;
         commands.spawn((
