@@ -3,7 +3,9 @@ use super::{cfg::player::*, *};
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct Player;
+pub struct Player {
+    pub direction: Vec3,
+}
 
 pub fn spawn_player(
     mut commands: Commands,
@@ -12,7 +14,9 @@ pub fn spawn_player(
 ) {
     commands
         .spawn((
-            Player,
+            Player {
+                direction: Vec3::new(0.0, 0.0, 0.0),
+            },
             (
                 Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
                 MeshMaterial3d(materials.add(default::COLOR)),
@@ -31,7 +35,7 @@ pub fn spawn_player(
 pub fn move_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
-    mut transform: Single<&mut Transform, With<Player>>,
+    mut player: Single<&mut Transform, With<Player>>,
 ) {
     let mut direction = Vec3::new(0.0, 0.0, 0.0);
     if key.pressed(cfg::bind::MOV_F) {
@@ -46,10 +50,28 @@ pub fn move_player(
     if key.pressed(cfg::bind::MOV_R) {
         direction.x += 1.0;
     }
-    transform.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs()
+    player.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
 }
 
-pub fn rotate_player(cursor: Res<Cursor>, mut player: Single<&mut Transform, With<Player>>) {
-    let direction = cursor.0 - player.translation;
-    player.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
+pub fn rotate_player(
+    window: Single<&Window>,
+    camera: Single<(&Camera, &GlobalTransform)>,
+    ground: Single<&GlobalTransform, With<Ground>>,
+    player: Single<(&mut Player, &mut Transform)>,
+) {
+    let Some(position) = window.cursor_position() else {
+        return;
+    };
+    let Ok(ray) = camera.0.viewport_to_world(camera.1, position) else {
+        return;
+    };
+    let Some(distance) =
+        ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
+    else {
+        return;
+    };
+    let (mut player, mut transform) = player.into_inner();
+    let direction = ray.get_point(distance) - transform.translation;
+    player.direction = direction;
+    transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
 }

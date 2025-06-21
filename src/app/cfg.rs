@@ -10,6 +10,7 @@ pub mod bullet {
     pub const RADIUS: f32 = 0.2;
     pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 0.5);
     pub const INTERVAL: f32 = 0.2;
+    pub const SPEED: f32 = 40.0;
 }
 
 pub mod camera {
