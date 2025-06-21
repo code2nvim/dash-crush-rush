@@ -10,7 +10,7 @@ impl Plugin for GamePlugin {
             .add_systems(Update, (move_player, rotate_player))
             .add_systems(Update, (fire_bullet, drive_bullet))
             .insert_resource(Fire {
-                first: false,
+                first: true,
                 timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
             });
     }
