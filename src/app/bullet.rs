@@ -21,11 +21,14 @@ pub fn fire_bullet(
     player: Single<(&Player, &Transform)>,
 ) {
     if !mouse.pressed(cfg::bind::FIRE) {
-        fire.first = true;
-        return fire.timer.reset();
+        return if fire.timer.tick(time.delta()).finished() {
+            fire.first = true;
+            fire.timer.reset();
+        };
     }
-    if fire.timer.tick(time.delta()).finished() || fire.first {
+    if fire.first || fire.timer.tick(time.delta()).finished() {
         fire.first = false;
+        fire.timer.reset();
         let (player, transform) = player.into_inner();
         let pos = transform.translation;
         commands.spawn((
