@@ -32,7 +32,7 @@ pub fn fire_bullet(
         let (player, transform) = player.into_inner();
         let pos = transform.translation;
         commands.spawn((
-            Bullet(player.direction.normalize_or_zero() * SPEED * time.delta_secs()),
+            Bullet(player.direction.normalize_or_zero()),
             (
                 Mesh3d(meshes.add(Sphere::new(RADIUS))),
                 MeshMaterial3d(materials.add(COLOR)),
@@ -42,8 +42,8 @@ pub fn fire_bullet(
     }
 }
 
-pub fn drive_bullet(mut bullets: Query<(&mut Bullet, &mut Transform)>) {
+pub fn drive_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform)>) {
     for (bullet, mut transform) in &mut bullets {
-        transform.translation += bullet.0;
+        transform.translation += bullet.0 * SPEED * time.delta_secs();
     }
 }

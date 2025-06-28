@@ -75,3 +75,15 @@ pub fn rotate_player(
     player.direction = direction;
     transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
 }
+
+// TODO: actually destroy player (currently just resetting position)
+pub fn destroy_player(
+    enemy: Query<&Transform, With<Enemy>>,
+    mut player: Single<&mut Transform, (With<Player>, Without<Enemy>)>,
+) {
+    for enemy in enemy {
+        if player.translation.distance(enemy.translation) <= default::RADIUS + cfg::enemy::RADIUS {
+            player.translation = Vec3::new(0.0, 0.0, 0.0);
+        }
+    }
+}

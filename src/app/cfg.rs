@@ -17,6 +17,11 @@ pub mod camera {
     pub const POS: (f32, f32, f32) = (0.0, 30.0, 30.0);
 }
 
+pub mod enemy {
+    pub const COLOR: crate::Color = crate::Color::srgb(0.7, 0.0, 0.0);
+    pub const RADIUS: f32 = 1.2;
+}
+
 pub mod ground {
     pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.5, 0.0);
     pub const SIZE: f32 = 20.0;
