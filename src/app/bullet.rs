@@ -47,3 +47,5 @@ pub fn drive_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform
         transform.translation += bullet.0 * SPEED * time.delta_secs();
     }
 }
+
+// TODO: destroy_bullet

@@ -58,7 +58,7 @@ pub fn reset_player(
     mut player: Single<&mut Transform, With<Player>>,
 ) {
     if key.pressed(cfg::bind::RESET) {
-        player.translation = Vec3::new(0.0, default::RADIUS, 0.0);
+        player.translation = (0.0, default::RADIUS, 0.0).into();
     }
 }
 
@@ -87,12 +87,12 @@ pub fn rotate_player(
 
 // TODO: actually destroy player (currently just resetting position)
 pub fn destroy_player(
-    enemy: Query<&Transform, With<Enemy>>,
+    enemies: Query<&Transform, With<Enemy>>,
     mut player: Single<&mut Transform, (With<Player>, Without<Enemy>)>,
 ) {
-    for enemy in enemy {
+    for enemy in enemies {
         if player.translation.distance(enemy.translation) <= default::RADIUS + cfg::enemy::RADIUS {
-            player.translation = Vec3::new(0.0, default::RADIUS, 0.0);
+            player.translation = (0.0, default::RADIUS, 0.0).into();
         }
     }
 }

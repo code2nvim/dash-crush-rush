@@ -19,8 +19,9 @@ pub mod camera {
 }
 
 pub mod enemy {
-    pub const COLOR: crate::Color = crate::Color::srgb(0.7, 0.0, 0.0);
+    pub const COLOR: crate::Color = crate::Color::srgb(0.6, 0.0, 0.0);
     pub const RADIUS: f32 = 1.2;
+    pub const SPEED: f32 = 10.0;
 }
 
 pub mod ground {
