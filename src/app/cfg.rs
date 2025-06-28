@@ -4,6 +4,7 @@ pub mod bind {
     pub const MOV_L: crate::KeyCode = crate::KeyCode::KeyA;
     pub const MOV_B: crate::KeyCode = crate::KeyCode::KeyS;
     pub const MOV_R: crate::KeyCode = crate::KeyCode::KeyD;
+    pub const RESET: crate::KeyCode = crate::KeyCode::Space;
 }
 
 pub mod bullet {

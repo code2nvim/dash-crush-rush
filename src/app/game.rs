@@ -7,7 +7,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, (spawn_player, spawn_enemy))
-            .add_systems(Update, (move_player, rotate_player, destroy_player))
+            .add_systems(Update, (move_player, reset_player, rotate_player, destroy_player))
             .add_systems(Update, (fire_bullet, drive_bullet))
             .insert_resource(Fire {
                 first: true,

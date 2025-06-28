@@ -53,6 +53,15 @@ pub fn move_player(
     player.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
 }
 
+pub fn reset_player(
+    key: Res<ButtonInput<KeyCode>>,
+    mut player: Single<&mut Transform, With<Player>>,
+) {
+    if key.pressed(cfg::bind::RESET) {
+        player.translation = Vec3::new(0.0, default::RADIUS, 0.0);
+    }
+}
+
 pub fn rotate_player(
     window: Single<&Window>,
     camera: Single<(&Camera, &GlobalTransform)>,
@@ -83,7 +92,7 @@ pub fn destroy_player(
 ) {
     for enemy in enemy {
         if player.translation.distance(enemy.translation) <= default::RADIUS + cfg::enemy::RADIUS {
-            player.translation = Vec3::new(0.0, 0.0, 0.0);
+            player.translation = Vec3::new(0.0, default::RADIUS, 0.0);
         }
     }
 }
