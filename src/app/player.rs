@@ -68,21 +68,16 @@ pub fn rotate_player(
     ground: Single<&GlobalTransform, With<Ground>>,
     player: Single<(&mut Player, &mut Transform)>,
 ) {
-    let Some(position) = window.cursor_position() else {
-        return;
-    };
-    let Ok(ray) = camera.0.viewport_to_world(camera.1, position) else {
-        return;
-    };
-    let Some(distance) =
-        ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
-    else {
-        return;
-    };
-    let (mut player, mut transform) = player.into_inner();
-    let direction = ray.get_point(distance) - transform.translation;
-    player.direction = direction;
-    transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
+    if let Some(position) = window.cursor_position()
+        && let Ok(ray) = camera.0.viewport_to_world(camera.1, position)
+        && let Some(distance) =
+            ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
+    {
+        let (mut player, mut transform) = player.into_inner();
+        let direction = ray.get_point(distance) - transform.translation;
+        player.direction = direction;
+        transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
+    }
 }
 
 // TODO: actually destroy player (currently just resetting position)

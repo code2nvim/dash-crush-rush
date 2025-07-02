@@ -17,10 +17,10 @@ pub fn spawn_enemy(
     }
     let border = crate::app::cfg::ground::SIZE * 0.5;
     let positions = [
-        (-border, -border),
-        (-border, border),
-        (border, -border),
-        (border, border),
+        (border, 0.0),
+        (-border, 0.0),
+        (0.0, border),
+        (0.0, -border),
     ];
     for pos in positions {
         commands.spawn((
