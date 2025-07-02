@@ -75,13 +75,13 @@ pub fn rotate_player(
     {
         let (mut player, mut transform) = player.into_inner();
         let direction = ray.get_point(distance) - transform.translation;
-        player.direction = direction;
+        player.direction = (direction.x, 0.0, direction.z).into();
         transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
     }
 }
 
 // TODO: actually destroy player (currently just resetting position)
-pub fn destroy_player(
+pub fn despawn_player(
     enemies: Query<&Transform, With<Enemy>>,
     mut player: Single<&mut Transform, (With<Player>, Without<Enemy>)>,
 ) {

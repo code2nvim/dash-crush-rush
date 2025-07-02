@@ -11,7 +11,7 @@ pub struct Fire {
     pub timer: Timer,
 }
 
-pub fn fire_bullet(
+pub fn spawn_bullet(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -42,10 +42,18 @@ pub fn fire_bullet(
     }
 }
 
-pub fn drive_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform)>) {
+pub fn move_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform)>) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.0 * SPEED * time.delta_secs();
     }
 }
 
-// TODO: destroy_bullet
+pub fn despawn_bullet(mut commands: Commands, bullets: Query<(Entity, &Transform), With<Bullet>>) {
+    for (entity, transform) in bullets {
+        let pos = transform.translation;
+        let border = crate::app::cfg::boundary::SIZE * 0.5;
+        if pos.x >= border || pos.x <= -border || pos.z >= border || pos.z <= -border {
+            commands.entity(entity).despawn();
+        }
+    }
+}
