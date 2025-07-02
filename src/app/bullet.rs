@@ -42,7 +42,7 @@ pub fn spawn_bullet(
     }
 }
 
-pub fn move_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform)>) {
+pub fn move_bullet(mut bullets: Query<(&Bullet, &mut Transform)>, time: Res<Time>) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.0 * SPEED * time.delta_secs();
     }

@@ -75,7 +75,7 @@ pub fn rotate_player(
     {
         let (mut player, mut transform) = player.into_inner();
         let direction = ray.get_point(distance) - transform.translation;
-        player.direction = (direction.x, 0.0, direction.z).into();
+        player.direction = Vec3::new(direction.x, 0.0, direction.z).normalize_or_zero();
         transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
     }
 }

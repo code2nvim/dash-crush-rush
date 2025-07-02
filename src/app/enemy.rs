@@ -7,7 +7,6 @@ pub struct Enemy;
 
 #[derive(Resource)]
 pub struct Casual {
-    pub vertical: bool,
     pub timer: Timer,
 }
 
@@ -17,15 +16,15 @@ pub fn spawn_enemy(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut casual: ResMut<Casual>,
     time: Res<Time>,
+    player: Single<&Transform, With<Player>>,
 ) {
     if casual.timer.tick(time.delta()).finished() {
-        let border = crate::app::cfg::ground::SIZE * 0.5;
-        let positions = if casual.vertical {
-            [(border, border), (-border, border)]
-        } else {
-            [(border, -border), (-border, -border)]
-        };
-        casual.vertical = !casual.vertical;
+        let size = cfg::ground::SIZE * 0.5;
+        let positions = [
+            (player.translation.x, -size),
+            (-size, player.translation.z),
+            (size, player.translation.z),
+        ];
         for pos in positions {
             commands.spawn((
                 Enemy,
@@ -44,17 +43,6 @@ pub fn move_enemy(
     player: Single<&Transform, (With<Player>, Without<Enemy>)>,
     time: Res<Time>,
 ) {
-    /*
-    for (mut enemy, mut transform) in &mut enemies {
-        let border = crate::app::cfg::ground::SIZE * 0.5;
-        let pos = transform.translation + enemy.0 * SPEED * time.delta_secs();
-        if pos.x >= border || pos.x <= -border || pos.z >= border || pos.z <= -border {
-            enemy.0 = -enemy.0;
-        } else {
-            transform.translation = pos;
-        }
-    }
-    */
     for mut enemy in &mut enemies {
         let direction = (player.translation - enemy.translation).normalize_or_zero();
         enemy.translation += direction * SPEED * time.delta_secs();

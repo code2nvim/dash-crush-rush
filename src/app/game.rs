@@ -11,8 +11,8 @@ impl Plugin for GamePlugin {
                 Update,
                 (
                     (move_player, reset_player, rotate_player, despawn_player),
-                    (spawn_enemy, move_enemy, despawn_enemy),
                     (spawn_bullet, move_bullet, despawn_bullet),
+                    (spawn_enemy, move_enemy, despawn_enemy),
                 ),
             )
             .insert_resource(Fire {
@@ -20,7 +20,6 @@ impl Plugin for GamePlugin {
                 timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
             })
             .insert_resource(Casual {
-                vertical: true,
                 timer: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
             });
     }
