@@ -7,6 +7,7 @@ pub struct Enemy;
 
 #[derive(Resource)]
 pub struct Casual {
+    pub corner: bool,
     pub timer: Timer,
 }
 
@@ -20,11 +21,17 @@ pub fn spawn_enemy(
 ) {
     if casual.timer.tick(time.delta()).finished() {
         let size = cfg::ground::SIZE * 0.5;
-        let positions = [
-            (player.translation.x, -size),
-            (-size, player.translation.z),
-            (size, player.translation.z),
-        ];
+        let positions: Vec<(f32, f32)> = if casual.corner {
+            [(-size, -size), (size, -size)].into()
+        } else {
+            [
+                (player.translation.x, -size),
+                (-size, player.translation.z),
+                (size, player.translation.z),
+            ]
+            .into()
+        };
+        casual.corner = !casual.corner;
         for pos in positions {
             commands.spawn((
                 Enemy,

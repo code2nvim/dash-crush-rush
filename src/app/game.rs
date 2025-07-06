@@ -20,6 +20,7 @@ impl Plugin for GamePlugin {
                 timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
             })
             .insert_resource(Casual {
+                corner: true,
                 timer: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
             });
     }

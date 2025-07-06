@@ -13,9 +13,9 @@ pub mod boundary {
 
 pub mod bullet {
     pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 0.6);
-    pub const INTERVAL: f32 = 0.2;
+    pub const INTERVAL: f32 = 0.15;
     pub const RADIUS: f32 = 0.2;
-    pub const SPEED: f32 = 30.0;
+    pub const SPEED: f32 = 35.0;
 }
 
 pub mod camera {
