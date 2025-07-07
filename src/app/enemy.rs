@@ -51,7 +51,8 @@ pub fn move_enemy(
     time: Res<Time>,
 ) {
     for mut enemy in &mut enemies {
-        let direction = (player.translation - enemy.translation).normalize_or_zero();
+        let relative = player.translation - enemy.translation;
+        let direction = Vec3::new(relative.x, 0.0, relative.z).normalize_or_zero();
         enemy.translation += direction * SPEED * time.delta_secs();
     }
 }

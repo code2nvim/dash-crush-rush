@@ -5,6 +5,7 @@ use bevy::prelude::*;
 #[derive(Component)]
 pub struct Player {
     pub direction: Vec3,
+    pub velocity: f32,
 }
 
 pub fn spawn_player(
@@ -16,6 +17,7 @@ pub fn spawn_player(
         .spawn((
             Player {
                 direction: Vec3::new(0.0, 0.0, 0.0),
+                velocity: 0.0,
             },
             (
                 Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
@@ -30,6 +32,26 @@ pub fn spawn_player(
                 Transform::from_xyz(gear::POS.0, gear::POS.1, gear::POS.2),
             ));
         });
+}
+
+pub fn leap_player(
+    key: Res<ButtonInput<KeyCode>>,
+    time: Res<Time>,
+    player: Single<(&mut Player, &mut Transform)>,
+) {
+    let (mut player, mut transform) = player.into_inner();
+    if key.pressed(cfg::bind::JUMP) && transform.translation.y == default::RADIUS {
+        player.velocity = 60.0;
+    } else {
+        player.velocity -= 5.0;
+    }
+    let pos = transform.translation.y + player.velocity * time.delta_secs();
+    if pos < default::RADIUS {
+        transform.translation.y = default::RADIUS;
+        player.velocity = 0.0;
+    } else {
+        transform.translation.y = pos;
+    }
 }
 
 pub fn move_player(
@@ -51,15 +73,6 @@ pub fn move_player(
         direction.x += 1.0;
     }
     player.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
-}
-
-pub fn reset_player(
-    key: Res<ButtonInput<KeyCode>>,
-    mut player: Single<&mut Transform, With<Player>>,
-) {
-    if key.pressed(cfg::bind::RESET) {
-        player.translation = (0.0, default::RADIUS, 0.0).into();
-    }
 }
 
 pub fn rotate_player(

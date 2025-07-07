@@ -10,7 +10,7 @@ impl Plugin for GamePlugin {
             .add_systems(
                 Update,
                 (
-                    (move_player, reset_player, rotate_player, despawn_player),
+                    (move_player, leap_player, rotate_player, despawn_player),
                     (spawn_bullet, move_bullet, despawn_bullet),
                     (spawn_enemy, move_enemy, despawn_enemy),
                 ),

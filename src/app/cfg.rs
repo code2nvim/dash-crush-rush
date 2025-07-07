@@ -1,10 +1,10 @@
 pub mod bind {
     pub const FIRE: crate::MouseButton = crate::MouseButton::Left;
+    pub const JUMP: crate::KeyCode = crate::KeyCode::Space;
     pub const MOV_F: crate::KeyCode = crate::KeyCode::KeyW;
     pub const MOV_L: crate::KeyCode = crate::KeyCode::KeyA;
     pub const MOV_B: crate::KeyCode = crate::KeyCode::KeyS;
     pub const MOV_R: crate::KeyCode = crate::KeyCode::KeyD;
-    pub const RESET: crate::KeyCode = crate::KeyCode::Space;
 }
 
 pub mod boundary {
