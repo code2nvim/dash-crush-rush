@@ -6,7 +6,7 @@ use bevy::prelude::*;
 pub struct Enemy;
 
 #[derive(Resource)]
-pub struct Casual {
+pub struct Enemies {
     pub corner: bool,
     pub timer: Timer,
 }
@@ -15,7 +15,7 @@ pub fn spawn_enemy(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut casual: ResMut<Casual>,
+    mut casual: ResMut<Enemies>,
     time: Res<Time>,
     player: Single<&Transform, With<Player>>,
 ) {

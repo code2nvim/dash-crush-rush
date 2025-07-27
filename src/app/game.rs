@@ -15,11 +15,11 @@ impl Plugin for GamePlugin {
                     (spawn_enemy, move_enemy, despawn_enemy),
                 ),
             )
-            .insert_resource(Fire {
+            .insert_resource(Bullets {
                 first: true,
                 timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
             })
-            .insert_resource(Casual {
+            .insert_resource(Enemies {
                 corner: true,
                 timer: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
             });

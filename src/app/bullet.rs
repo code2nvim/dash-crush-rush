@@ -6,7 +6,7 @@ use bevy::prelude::*;
 pub struct Bullet(Vec3);
 
 #[derive(Resource)]
-pub struct Fire {
+pub struct Bullets {
     pub first: bool,
     pub timer: Timer,
 }
@@ -15,7 +15,7 @@ pub fn spawn_bullet(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut fire: ResMut<Fire>,
+    mut fire: ResMut<Bullets>,
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
     player: Single<(&Player, &Transform)>,
