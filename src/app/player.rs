@@ -95,12 +95,13 @@ pub fn rotate_player(
 
 // TODO: actually destroy player (currently just resetting position)
 pub fn despawn_player(
-    enemies: Query<&Transform, With<Enemy>>,
-    mut player: Single<&mut Transform, (With<Player>, Without<Enemy>)>,
+    mut destroy: EventReader<Destroy>,
+    mut player: Single<&mut Transform, With<Player>>,
 ) {
-    for enemy in enemies {
-        if player.translation.distance(enemy.translation) <= default::RADIUS + cfg::enemy::RADIUS {
-            player.translation = (0.0, default::RADIUS, 0.0).into();
+    for destroy in destroy.read() {
+        player.translation = (0.0, cfg::player::default::RADIUS, 0.0).into();
+        match destroy.0 {
+            Reason::Enemy => println!(),
         }
     }
 }

@@ -2,6 +2,7 @@ mod cfg;
 
 mod bullet;
 mod camera;
+mod destroy;
 mod enemy;
 mod game;
 mod ground;
@@ -10,6 +11,7 @@ mod player;
 
 pub use bullet::*;
 pub use camera::*;
+pub use destroy::*;
 pub use enemy::*;
 pub use game::*;
 pub use ground::*;

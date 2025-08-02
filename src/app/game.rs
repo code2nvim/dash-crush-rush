@@ -7,6 +7,7 @@ pub struct GamePlugin;
 impl Plugin for GamePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_player)
+            .add_plugins(DestroyPlugin)
             .add_systems(
                 Update,
                 (
