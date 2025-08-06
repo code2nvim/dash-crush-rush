@@ -2,16 +2,28 @@ use super::{cfg::bullet::*, *};
 
 use bevy::prelude::*;
 
+pub struct BulletPlugin;
+
+impl Plugin for BulletPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Update, ((spawn_bullet, move_bullet, despawn_bullet),))
+            .insert_resource(Bullets {
+                first: true,
+                timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
+            });
+    }
+}
+
 #[derive(Component)]
 pub struct Bullet(Vec3);
 
 #[derive(Resource)]
-pub struct Bullets {
-    pub first: bool,
-    pub timer: Timer,
+struct Bullets {
+    first: bool,
+    timer: Timer,
 }
 
-pub fn spawn_bullet(
+fn spawn_bullet(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -42,13 +54,13 @@ pub fn spawn_bullet(
     }
 }
 
-pub fn move_bullet(mut bullets: Query<(&Bullet, &mut Transform)>, time: Res<Time>) {
+fn move_bullet(mut bullets: Query<(&Bullet, &mut Transform)>, time: Res<Time>) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.0 * SPEED * time.delta_secs();
     }
 }
 
-pub fn despawn_bullet(mut commands: Commands, bullets: Query<(Entity, &Transform), With<Bullet>>) {
+fn despawn_bullet(mut commands: Commands, bullets: Query<(Entity, &Transform), With<Bullet>>) {
     for (entity, transform) in bullets {
         let pos = transform.translation;
         let border = crate::app::cfg::boundary::SIZE * 0.5;

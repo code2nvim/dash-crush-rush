@@ -2,9 +2,6 @@ use super::cfg::light::*;
 
 use bevy::prelude::*;
 
-#[derive(Component)]
-struct Light;
-
 pub fn spawn_light(mut commands: Commands) {
     commands.insert_resource(AmbientLight {
         color: Color::WHITE,

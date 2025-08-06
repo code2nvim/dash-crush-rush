@@ -2,13 +2,25 @@ use super::{cfg::player::*, *};
 
 use bevy::prelude::*;
 
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(Startup, spawn_player) // cargo fmt
+            .add_systems(
+                Update,
+                (move_player, leap_player, rotate_player, despawn_player),
+            );
+    }
+}
+
 #[derive(Component)]
 pub struct Player {
     pub direction: Vec3,
-    pub velocity: f32,
+    velocity: f32,
 }
 
-pub fn spawn_player(
+fn spawn_player(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -34,7 +46,7 @@ pub fn spawn_player(
         });
 }
 
-pub fn leap_player(
+fn leap_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     player: Single<(&mut Player, &mut Transform)>,
@@ -54,7 +66,7 @@ pub fn leap_player(
     }
 }
 
-pub fn move_player(
+fn move_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
     mut player: Single<&mut Transform, With<Player>>,
@@ -75,7 +87,7 @@ pub fn move_player(
     player.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
 }
 
-pub fn rotate_player(
+fn rotate_player(
     window: Single<&Window>,
     camera: Single<(&Camera, &GlobalTransform)>,
     ground: Single<&GlobalTransform, With<Ground>>,
@@ -94,14 +106,16 @@ pub fn rotate_player(
 }
 
 // TODO: actually destroy player (currently just resetting position)
-pub fn despawn_player(
+fn despawn_player(
     mut destroy: EventReader<Destroy>,
+    mut materials: ResMut<Assets<StandardMaterial>>,
+    mut material: Single<&mut MeshMaterial3d<StandardMaterial>, With<Player>>,
     mut player: Single<&mut Transform, With<Player>>,
 ) {
     for destroy in destroy.read() {
         player.translation = (0.0, cfg::player::default::RADIUS, 0.0).into();
         match destroy.0 {
-            Reason::Enemy => println!(),
+            Reason::Enemy => material.0 = materials.add(cfg::enemy::COLOR),
         }
     }
 }

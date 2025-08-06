@@ -2,16 +2,31 @@ use super::{cfg::enemy::*, *};
 
 use bevy::prelude::*;
 
+pub struct EnemyPlugin;
+
+impl Plugin for EnemyPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_systems(
+            Update,
+            (spawn_enemy, move_enemy, despawn_enemy, destroy_player),
+        )
+        .insert_resource(Enemies {
+            corner: true,
+            timer: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
+        });
+    }
+}
+
 #[derive(Component)]
 pub struct Enemy;
 
 #[derive(Resource)]
-pub struct Enemies {
-    pub corner: bool,
-    pub timer: Timer,
+struct Enemies {
+    corner: bool,
+    timer: Timer,
 }
 
-pub fn spawn_enemy(
+fn spawn_enemy(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
@@ -45,7 +60,7 @@ pub fn spawn_enemy(
     }
 }
 
-pub fn move_enemy(
+fn move_enemy(
     mut enemies: Query<&mut Transform, With<Enemy>>,
     player: Single<&Transform, (With<Player>, Without<Enemy>)>,
     time: Res<Time>,
@@ -57,7 +72,7 @@ pub fn move_enemy(
     }
 }
 
-pub fn despawn_enemy(
+fn despawn_enemy(
     mut commands: Commands,
     enemies: Query<(Entity, &Transform), (With<Enemy>, Without<Bullet>)>,
     bullets: Query<&Transform, With<Bullet>>,
@@ -67,6 +82,19 @@ pub fn despawn_enemy(
             if enemy.translation.distance(bullet.translation) <= RADIUS + cfg::bullet::RADIUS {
                 commands.entity(entity).despawn();
             }
+        }
+    }
+}
+
+fn destroy_player(
+    player: Single<&Transform, With<Player>>,
+    enemies: Query<&Transform, With<Enemy>>,
+    mut destroy: EventWriter<Destroy>,
+) {
+    for enemy in enemies {
+        let distance = player.translation.distance(enemy.translation);
+        if distance <= cfg::player::default::RADIUS + cfg::enemy::RADIUS {
+            destroy.write(Destroy(Reason::Enemy));
         }
     }
 }
