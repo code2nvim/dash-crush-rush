@@ -15,6 +15,7 @@ impl Plugin for BulletPlugin {
 }
 
 #[derive(Component)]
+#[component(immutable)]
 pub struct Bullet(Vec3);
 
 #[derive(Resource)]

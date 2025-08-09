@@ -18,6 +18,7 @@ impl Plugin for EnemyPlugin {
 }
 
 #[derive(Component)]
+#[component(immutable)]
 pub struct Enemy;
 
 #[derive(Resource)]

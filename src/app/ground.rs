@@ -3,6 +3,7 @@ use super::cfg::ground::*;
 use bevy::prelude::*;
 
 #[derive(Component)]
+#[component(immutable)]
 pub struct Ground;
 
 pub fn spawn_ground(
