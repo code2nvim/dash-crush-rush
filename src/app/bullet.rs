@@ -31,7 +31,8 @@ fn spawn_bullet(
     mut fire: ResMut<Bullets>,
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
-    player: Single<(&Player, &Transform)>,
+    direction: Single<&Direction>,
+    transform: Single<&Transform, With<Player>>,
 ) {
     if !mouse.pressed(cfg::bind::FIRE) {
         return if fire.timer.tick(time.delta()).finished() {
@@ -42,10 +43,9 @@ fn spawn_bullet(
     if fire.first || fire.timer.tick(time.delta()).finished() {
         fire.first = false;
         fire.timer.reset();
-        let (player, transform) = player.into_inner();
         let pos = transform.translation;
         commands.spawn((
-            Bullet(player.direction.normalize_or_zero()),
+            Bullet(direction.0.normalize_or_zero()),
             (
                 Mesh3d(meshes.add(Sphere::new(RADIUS))),
                 MeshMaterial3d(materials.add(COLOR)),

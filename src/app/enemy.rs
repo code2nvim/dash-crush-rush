@@ -41,9 +41,9 @@ fn spawn_enemy(
             [(-size, -size), (size, -size)].into()
         } else {
             [
-                (player.translation.x, -size),
                 (-size, player.translation.z),
                 (size, player.translation.z),
+                (player.translation.x, -size),
             ]
             .into()
         };

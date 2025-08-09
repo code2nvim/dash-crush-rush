@@ -15,10 +15,8 @@ impl Plugin for PlayerPlugin {
 }
 
 #[derive(Component)]
-pub struct Player {
-    pub direction: Vec3,
-    velocity: f32,
-}
+#[component(immutable)]
+pub struct Player;
 
 fn spawn_player(
     mut commands: Commands,
@@ -27,10 +25,8 @@ fn spawn_player(
 ) {
     commands
         .spawn((
-            Player {
-                direction: Vec3::new(0.0, 0.0, 0.0),
-                velocity: 0.0,
-            },
+            Player,
+            (Velocity(0.0), Direction(Vec3::new(0.0, 0.0, 0.0))),
             (
                 Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
                 MeshMaterial3d(materials.add(default::COLOR)),
@@ -49,18 +45,18 @@ fn spawn_player(
 fn leap_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
-    player: Single<(&mut Player, &mut Transform)>,
+    mut transform: Single<&mut Transform, With<Player>>,
+    mut velocity: Single<&mut Velocity, With<Player>>,
 ) {
-    let (mut player, mut transform) = player.into_inner();
     if key.pressed(cfg::bind::JUMP) && transform.translation.y == default::RADIUS {
-        player.velocity = 60.0;
+        velocity.0 = 60.0;
     } else {
-        player.velocity -= 5.0;
+        velocity.0 -= 5.0;
     }
-    let pos = transform.translation.y + player.velocity * time.delta_secs();
+    let pos = transform.translation.y + velocity.0 * time.delta_secs();
     if pos < default::RADIUS {
         transform.translation.y = default::RADIUS;
-        player.velocity = 0.0;
+        velocity.0 = 0.0;
     } else {
         transform.translation.y = pos;
     }
@@ -69,7 +65,7 @@ fn leap_player(
 fn move_player(
     key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
-    mut player: Single<&mut Transform, With<Player>>,
+    mut transform: Single<&mut Transform, With<Player>>,
 ) {
     let mut direction = Vec3::new(0.0, 0.0, 0.0);
     if key.pressed(cfg::bind::MOV_F) {
@@ -84,24 +80,24 @@ fn move_player(
     if key.pressed(cfg::bind::MOV_R) {
         direction.x += 1.0;
     }
-    player.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
+    transform.translation += direction.normalize_or_zero() * default::SPEED * time.delta_secs();
 }
 
 fn rotate_player(
     window: Single<&Window>,
     camera: Single<(&Camera, &GlobalTransform)>,
     ground: Single<&GlobalTransform, With<Ground>>,
-    player: Single<(&mut Player, &mut Transform)>,
+    mut transform: Single<&mut Transform, With<Player>>,
+    mut direction: Single<&mut Direction, With<Player>>,
 ) {
     if let Some(position) = window.cursor_position()
         && let Ok(ray) = camera.0.viewport_to_world(camera.1, position)
         && let Some(distance) =
             ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
     {
-        let (mut player, mut transform) = player.into_inner();
-        let direction = ray.get_point(distance) - transform.translation;
-        player.direction = Vec3::new(direction.x, 0.0, direction.z).normalize_or_zero();
-        transform.rotation = Quat::from_rotation_y(direction.x.atan2(direction.z));
+        let dir = ray.get_point(distance) - transform.translation;
+        direction.0 = Vec3::new(dir.x, 0.0, dir.z).normalize_or_zero();
+        transform.rotation = Quat::from_rotation_y(dir.x.atan2(dir.z));
     }
 }
 
