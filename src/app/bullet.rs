@@ -6,16 +6,25 @@ pub struct BulletPlugin;
 
 impl Plugin for BulletPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(
-            Update,
-            ((spawn_bullet, move_bullet, destroy_enemy, despawn_bullet),),
-        )
-        .insert_resource(Bullets {
-            first: true,
-            timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
-        });
+        app.add_event::<Fire>()
+            .add_systems(
+                Update,
+                (
+                    fire_bullet,
+                    spawn_bullet,
+                    move_bullet,
+                    destroy_enemy,
+                    despawn_bullet,
+                ),
+            )
+            .insert_resource(Bullets {
+                timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Once),
+            });
     }
 }
+
+#[derive(Event)]
+pub struct Fire;
 
 #[derive(Component)]
 #[component(immutable)]
@@ -23,29 +32,34 @@ pub struct Bullet(Vec3);
 
 #[derive(Resource)]
 struct Bullets {
-    first: bool,
     timer: Timer,
+}
+
+fn fire_bullet(
+    time: Res<Time>,
+    mouse: Res<ButtonInput<MouseButton>>,
+    mut bullets: ResMut<Bullets>,
+    mut fire: EventWriter<Fire>,
+) {
+    bullets.timer.tick(time.delta());
+    if !mouse.pressed(cfg::bind::FIRE) {
+        return;
+    }
+    if bullets.timer.finished() {
+        fire.write(Fire);
+        bullets.timer.reset();
+    }
 }
 
 fn spawn_bullet(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut fire: ResMut<Bullets>,
-    time: Res<Time>,
-    mouse: Res<ButtonInput<MouseButton>>,
+    mut fire: EventReader<Fire>,
     direction: Single<&Direction>,
     transform: Single<&Transform, With<Player>>,
 ) {
-    if !mouse.pressed(cfg::bind::FIRE) {
-        return if fire.timer.tick(time.delta()).finished() {
-            fire.first = true;
-            fire.timer.reset();
-        };
-    }
-    if fire.first || fire.timer.tick(time.delta()).finished() {
-        fire.first = false;
-        fire.timer.reset();
+    for _ in fire.read() {
         let pos = transform.translation;
         commands.spawn((
             Bullet(direction.0.normalize_or_zero()),
@@ -58,7 +72,7 @@ fn spawn_bullet(
     }
 }
 
-fn move_bullet(mut bullets: Query<(&Bullet, &mut Transform)>, time: Res<Time>) {
+fn move_bullet(time: Res<Time>, mut bullets: Query<(&Bullet, &mut Transform)>) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.0 * SPEED * time.delta_secs();
     }
