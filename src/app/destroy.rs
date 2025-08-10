@@ -4,13 +4,16 @@ pub struct DestroyPlugin;
 
 impl Plugin for DestroyPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<Destroy>();
+        app.add_event::<DestroyEnemy>().add_event::<DestroyPlayer>();
     }
 }
 
 #[derive(Event)]
-pub struct Destroy(pub Reason);
+pub struct DestroyEnemy(pub Entity);
 
-pub enum Reason {
+#[derive(Event)]
+pub struct DestroyPlayer(pub PlayerReason);
+
+pub enum PlayerReason {
     Enemy,
 }

@@ -6,11 +6,10 @@ pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_player) // cargo fmt
-            .add_systems(
-                Update,
-                (move_player, leap_player, rotate_player, despawn_player),
-            );
+        app.add_systems(Startup, spawn_player).add_systems(
+            Update,
+            (move_player, leap_player, rotate_player, despawn_player),
+        );
     }
 }
 
@@ -101,9 +100,9 @@ fn rotate_player(
     }
 }
 
-// TODO: actually destroy player (currently just resetting position)
+// TODO: actually despawn player (currently just resetting position)
 fn despawn_player(
-    mut destroy: EventReader<Destroy>,
+    mut destroy: EventReader<DestroyPlayer>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut material: Single<&mut MeshMaterial3d<StandardMaterial>, With<Player>>,
     mut player: Single<&mut Transform, With<Player>>,
@@ -111,7 +110,7 @@ fn despawn_player(
     for destroy in destroy.read() {
         player.translation = (0.0, cfg::player::default::RADIUS, 0.0).into();
         match destroy.0 {
-            Reason::Enemy => material.0 = materials.add(cfg::enemy::COLOR),
+            PlayerReason::Enemy => material.0 = materials.add(cfg::enemy::COLOR),
         }
     }
 }

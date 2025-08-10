@@ -6,11 +6,14 @@ pub struct BulletPlugin;
 
 impl Plugin for BulletPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, ((spawn_bullet, move_bullet, despawn_bullet),))
-            .insert_resource(Bullets {
-                first: true,
-                timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
-            });
+        app.add_systems(
+            Update,
+            ((spawn_bullet, move_bullet, destroy_enemy, despawn_bullet),),
+        )
+        .insert_resource(Bullets {
+            first: true,
+            timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Repeating),
+        });
     }
 }
 
@@ -58,6 +61,21 @@ fn spawn_bullet(
 fn move_bullet(mut bullets: Query<(&Bullet, &mut Transform)>, time: Res<Time>) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.0 * SPEED * time.delta_secs();
+    }
+}
+
+fn destroy_enemy(
+    bullets: Query<&Transform, With<Bullet>>,
+    enemies: Query<(Entity, &Transform), With<Enemy>>,
+    mut destroy: EventWriter<DestroyEnemy>,
+) {
+    for (entity, transform) in enemies {
+        for bullet in bullets {
+            let distance = RADIUS + cfg::enemy::RADIUS;
+            if transform.translation.distance(bullet.translation) <= distance {
+                destroy.write(DestroyEnemy(entity));
+            }
+        }
     }
 }
 

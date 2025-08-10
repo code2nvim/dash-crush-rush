@@ -62,9 +62,9 @@ fn spawn_enemy(
 }
 
 fn move_enemy(
-    mut enemies: Query<&mut Transform, With<Enemy>>,
-    player: Single<&Transform, (With<Player>, Without<Enemy>)>,
     time: Res<Time>,
+    player: Single<&Transform, (With<Player>, Without<Enemy>)>,
+    mut enemies: Query<&mut Transform, With<Enemy>>,
 ) {
     for mut enemy in &mut enemies {
         let relative = player.translation - enemy.translation;
@@ -73,29 +73,21 @@ fn move_enemy(
     }
 }
 
-fn despawn_enemy(
-    mut commands: Commands,
-    enemies: Query<(Entity, &Transform), (With<Enemy>, Without<Bullet>)>,
-    bullets: Query<&Transform, With<Bullet>>,
-) {
-    for (entity, enemy) in enemies {
-        for bullet in bullets {
-            if enemy.translation.distance(bullet.translation) <= RADIUS + cfg::bullet::RADIUS {
-                commands.entity(entity).despawn();
-            }
-        }
-    }
-}
-
 fn destroy_player(
     player: Single<&Transform, With<Player>>,
     enemies: Query<&Transform, With<Enemy>>,
-    mut destroy: EventWriter<Destroy>,
+    mut destroy: EventWriter<DestroyPlayer>,
 ) {
     for enemy in enemies {
         let distance = player.translation.distance(enemy.translation);
         if distance <= cfg::player::default::RADIUS + cfg::enemy::RADIUS {
-            destroy.write(Destroy(Reason::Enemy));
+            destroy.write(DestroyPlayer(PlayerReason::Enemy));
         }
+    }
+}
+
+fn despawn_enemy(mut commands: Commands, mut enemies: EventReader<DestroyEnemy>) {
+    for enemy in enemies.read() {
+        commands.entity(enemy.0).try_despawn();
     }
 }
