@@ -1,5 +1,6 @@
 pub mod bind {
     pub const FIRE: crate::MouseButton = crate::MouseButton::Left;
+    pub const SHIELD: crate::MouseButton = crate::MouseButton::Right;
     pub const JUMP: crate::KeyCode = crate::KeyCode::Space;
     pub const MOV_F: crate::KeyCode = crate::KeyCode::KeyW;
     pub const MOV_L: crate::KeyCode = crate::KeyCode::KeyA;
@@ -44,6 +45,9 @@ pub mod player {
         pub const COLOR: crate::Color = crate::Color::srgb(0.5, 0.5, 0.5);
         pub const RADIUS: f32 = 1.0;
         pub const SPEED: f32 = 10.0;
+    }
+    pub mod shield {
+        pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 1.0);
     }
     pub mod gear {
         pub const COLOR: crate::Color = crate::Color::BLACK;

@@ -12,7 +12,7 @@ impl Plugin for EnemyPlugin {
         )
         .insert_resource(Enemies {
             corner: true,
-            timer: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
+            interval: Timer::from_seconds(cfg::enemy::INTERVAL, TimerMode::Repeating),
         });
     }
 }
@@ -24,20 +24,20 @@ pub struct Enemy;
 #[derive(Resource)]
 struct Enemies {
     corner: bool,
-    timer: Timer,
+    interval: Timer,
 }
 
 fn spawn_enemy(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut casual: ResMut<Enemies>,
+    mut enemies: ResMut<Enemies>,
     time: Res<Time>,
     player: Single<&Transform, With<Player>>,
 ) {
-    if casual.timer.tick(time.delta()).finished() {
+    if enemies.interval.tick(time.delta()).finished() {
         let size = cfg::ground::SIZE * 0.5;
-        let positions: Vec<(f32, f32)> = if casual.corner {
+        let positions: Vec<(f32, f32)> = if enemies.corner {
             [(-size, -size), (size, -size)].into()
         } else {
             [
@@ -47,7 +47,7 @@ fn spawn_enemy(
             ]
             .into()
         };
-        casual.corner = !casual.corner;
+        enemies.corner = !enemies.corner;
         for pos in positions {
             commands.spawn((
                 Enemy,

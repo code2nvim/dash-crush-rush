@@ -25,7 +25,11 @@ fn spawn_player(
     commands
         .spawn((
             Player,
-            (Velocity(0.0), Direction(Vec3::new(0.0, 0.0, 0.0))),
+            (
+                Velocity(0.0),
+                Direction(Vec3::new(0.0, 0.0, 0.0)),
+                Shield { active: false },
+            ),
             (
                 Mesh3d(meshes.add(Sphere::new(default::RADIUS))),
                 MeshMaterial3d(materials.add(default::COLOR)),
@@ -42,8 +46,8 @@ fn spawn_player(
 }
 
 fn leap_player(
-    key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
+    key: Res<ButtonInput<KeyCode>>,
     mut transform: Single<&mut Transform, With<Player>>,
     mut velocity: Single<&mut Velocity, With<Player>>,
 ) {
@@ -52,18 +56,18 @@ fn leap_player(
     } else {
         velocity.0 -= 5.0;
     }
-    let pos = transform.translation.y + velocity.0 * time.delta_secs();
-    if pos < default::RADIUS {
+    let position = transform.translation.y + velocity.0 * time.delta_secs();
+    if position < default::RADIUS {
         transform.translation.y = default::RADIUS;
         velocity.0 = 0.0;
     } else {
-        transform.translation.y = pos;
+        transform.translation.y = position;
     }
 }
 
 fn move_player(
-    key: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
+    key: Res<ButtonInput<KeyCode>>,
     mut transform: Single<&mut Transform, With<Player>>,
 ) {
     let mut direction = Vec3::new(0.0, 0.0, 0.0);

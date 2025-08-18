@@ -8,6 +8,7 @@ mod game;
 mod ground;
 mod light;
 mod player;
+mod shield;
 mod utils;
 
 pub use bullet::*;
@@ -18,4 +19,5 @@ pub use game::*;
 pub use ground::*;
 pub use light::*;
 pub use player::*;
+pub use shield::*;
 pub use utils::*;

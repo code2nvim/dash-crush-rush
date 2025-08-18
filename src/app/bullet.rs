@@ -18,13 +18,10 @@ impl Plugin for BulletPlugin {
                 ),
             )
             .insert_resource(Bullets {
-                timer: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Once),
+                interval: Timer::from_seconds(cfg::bullet::INTERVAL, TimerMode::Once),
             });
     }
 }
-
-#[derive(Event)]
-pub struct Fire;
 
 #[derive(Component)]
 #[component(immutable)]
@@ -32,22 +29,25 @@ pub struct Bullet(Vec3);
 
 #[derive(Resource)]
 struct Bullets {
-    timer: Timer,
+    interval: Timer,
 }
+
+#[derive(Event)]
+struct Fire;
 
 fn fire_bullet(
     time: Res<Time>,
     mouse: Res<ButtonInput<MouseButton>>,
+    shield: Single<&Shield, With<Player>>,
     mut bullets: ResMut<Bullets>,
     mut fire: EventWriter<Fire>,
 ) {
-    bullets.timer.tick(time.delta());
-    if !mouse.pressed(cfg::bind::FIRE) {
+    if !bullets.interval.tick(time.delta()).finished() {
         return;
     }
-    if bullets.timer.finished() {
+    if mouse.pressed(cfg::bind::FIRE) && !shield.active {
+        bullets.interval.reset();
         fire.write(Fire);
-        bullets.timer.reset();
     }
 }
 
