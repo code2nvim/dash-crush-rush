@@ -12,7 +12,8 @@ impl Plugin for ObstaclePlugin {
 }
 
 #[derive(Component)]
-pub struct Obstacle;
+#[component(immutable)]
+struct Obstacle;
 
 fn spawn_obstacle(
     mut commands: Commands,

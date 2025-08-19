@@ -10,6 +10,7 @@ impl Plugin for GamePlugin {
             .add_systems(Startup, (spawn_camera, spawn_ground, spawn_light))
             .add_plugins((
                 BulletPlugin,
+                CursorPlugin,
                 DestroyPlugin,
                 EnemyPlugin,
                 PlayerPlugin,

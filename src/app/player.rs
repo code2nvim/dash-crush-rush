@@ -87,21 +87,13 @@ fn move_player(
 }
 
 fn rotate_player(
-    window: Single<&Window>,
-    camera: Single<(&Camera, &GlobalTransform)>,
-    ground: Single<&GlobalTransform, With<Ground>>,
+    cursor: Res<Cursor>,
     mut transform: Single<&mut Transform, With<Player>>,
     mut direction: Single<&mut Direction, With<Player>>,
 ) {
-    if let Some(position) = window.cursor_position()
-        && let Ok(ray) = camera.0.viewport_to_world(camera.1, position)
-        && let Some(distance) =
-            ray.intersect_plane(ground.translation(), InfinitePlane3d::new(ground.up()))
-    {
-        let dir = ray.get_point(distance) - transform.translation;
-        direction.0 = Vec3::new(dir.x, 0.0, dir.z).normalize_or_zero();
-        transform.rotation = Quat::from_rotation_y(dir.x.atan2(dir.z));
-    }
+    let dir = cursor.0 - transform.translation;
+    direction.0 = Vec3::new(dir.x, 0.0, dir.z).normalize_or_zero();
+    transform.rotation = Quat::from_rotation_y(dir.x.atan2(dir.z));
 }
 
 // TODO: actually despawn player (currently just resetting position)

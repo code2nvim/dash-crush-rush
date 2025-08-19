@@ -2,6 +2,7 @@ mod cfg;
 
 mod bullet;
 mod camera;
+mod cursor;
 mod destroy;
 mod enemy;
 mod game;
@@ -14,6 +15,7 @@ mod utils;
 
 pub use bullet::*;
 pub use camera::*;
+pub use cursor::*;
 pub use destroy::*;
 pub use enemy::*;
 pub use game::*;
