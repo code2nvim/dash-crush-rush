@@ -9,7 +9,7 @@ pub mod bind {
 }
 
 pub mod boundary {
-    pub const SIZE: f32 = 30.0;
+    pub const SIZE: f32 = 35.0;
 }
 
 pub mod bullet {
@@ -25,19 +25,24 @@ pub mod camera {
 
 pub mod enemy {
     pub const COLOR: crate::Color = crate::Color::srgb(0.6, 0.0, 0.0);
-    pub const INTERVAL: f32 = 1.5;
+    pub const INTERVAL: f32 = 2.0;
     pub const RADIUS: f32 = 1.2;
     pub const SPEED: f32 = 5.0;
 }
 
 pub mod ground {
     pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.5, 0.0);
-    pub const SIZE: f32 = 25.0;
+    pub const SIZE: f32 = 30.0;
 }
 
 pub mod light {
     pub const BRIGHTNESS: f32 = 300.0;
     pub const ILLUMINANCE: f32 = 3000.0;
+}
+
+pub mod obstacle {
+    pub const COLOR: crate::Color = crate::Color::srgb(0.3, 0.0, 0.3);
+    pub const LENGTH: f32 = 2.0;
 }
 
 pub mod player {
@@ -48,6 +53,10 @@ pub mod player {
     }
     pub mod shield {
         pub const COLOR: crate::Color = crate::Color::srgb(0.0, 0.0, 1.0);
+    }
+    pub mod gravity {
+        pub const START: f32 = 30.0;
+        pub const FALL: f32 = 2.0;
     }
     pub mod gear {
         pub const COLOR: crate::Color = crate::Color::BLACK;

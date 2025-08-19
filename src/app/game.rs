@@ -13,6 +13,7 @@ impl Plugin for GamePlugin {
                 DestroyPlugin,
                 EnemyPlugin,
                 PlayerPlugin,
+                ObstaclePlugin,
                 ShieldPlugin,
             ));
     }

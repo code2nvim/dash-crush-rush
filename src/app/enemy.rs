@@ -28,12 +28,12 @@ struct Enemies {
 }
 
 fn spawn_enemy(
+    time: Res<Time>,
+    player: Single<&Transform, With<Player>>,
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut enemies: ResMut<Enemies>,
-    time: Res<Time>,
-    player: Single<&Transform, With<Player>>,
 ) {
     if enemies.interval.tick(time.delta()).finished() {
         let size = cfg::ground::SIZE * 0.5;

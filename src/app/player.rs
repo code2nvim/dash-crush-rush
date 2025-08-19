@@ -52,9 +52,9 @@ fn leap_player(
     mut velocity: Single<&mut Velocity, With<Player>>,
 ) {
     if key.pressed(cfg::bind::JUMP) && transform.translation.y == default::RADIUS {
-        velocity.0 = 60.0;
+        velocity.0 = gravity::START;
     } else {
-        velocity.0 -= 5.0;
+        velocity.0 -= gravity::FALL;
     }
     let position = transform.translation.y + velocity.0 * time.delta_secs();
     if position < default::RADIUS {
@@ -115,6 +115,7 @@ fn despawn_player(
         player.translation = (0.0, cfg::player::default::RADIUS, 0.0).into();
         match destroy.0 {
             PlayerReason::Enemy => material.0 = materials.add(cfg::enemy::COLOR),
+            PlayerReason::Obstacle => material.0 = materials.add(cfg::obstacle::COLOR),
         }
     }
 }
