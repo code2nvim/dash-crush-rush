@@ -43,6 +43,7 @@ pub mod light {
 pub mod obstacle {
     pub const COLOR: crate::Color = crate::Color::srgb(0.3, 0.0, 0.3);
     pub const LENGTH: f32 = 2.0;
+    pub const SPEED: f32 = 15.0;
 }
 
 pub mod player {

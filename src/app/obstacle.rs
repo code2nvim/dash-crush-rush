@@ -7,7 +7,7 @@ pub struct ObstaclePlugin;
 impl Plugin for ObstaclePlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_obstacle)
-            .add_systems(Update, destroy_player);
+            .add_systems(Update, (destroy_player, move_obstacle));
     }
 }
 
@@ -23,11 +23,18 @@ fn spawn_obstacle(
     commands.spawn((
         Obstacle,
         (
-            Mesh3d(meshes.add(Cuboid::new(cfg::ground::SIZE, 0.01, LENGTH))),
+            Mesh3d(meshes.add(Cuboid::new(cfg::ground::SIZE, 1.0, LENGTH))),
             MeshMaterial3d(materials.add(COLOR)),
             Transform::from_xyz(0.0, 0.0, -cfg::boundary::SIZE),
         ),
     ));
+}
+
+fn move_obstacle(time: Res<Time>, mut obstacle: Single<&mut Transform, With<Obstacle>>) {
+    obstacle.translation.z += SPEED * time.delta_secs();
+    if obstacle.translation.z >= cfg::ground::SIZE {
+        obstacle.translation.z = -cfg::ground::SIZE;
+    }
 }
 
 fn destroy_player(
