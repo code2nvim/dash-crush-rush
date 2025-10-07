@@ -16,6 +16,7 @@ impl Plugin for GamePlugin {
                 PlayerPlugin,
                 ObstaclePlugin,
                 ShieldPlugin,
+                WallPlugin,
             ));
     }
 }

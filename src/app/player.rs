@@ -108,6 +108,7 @@ fn despawn_player(
         match destroy.0 {
             PlayerReason::Enemy => material.0 = materials.add(cfg::enemy::COLOR),
             PlayerReason::Obstacle => material.0 = materials.add(cfg::obstacle::COLOR),
+            PlayerReason::Wall => material.0 = materials.add(cfg::wall::COLOR),
         }
     }
 }

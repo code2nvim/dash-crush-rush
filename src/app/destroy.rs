@@ -17,4 +17,5 @@ pub struct DestroyPlayer(pub PlayerReason);
 pub enum PlayerReason {
     Enemy,
     Obstacle,
+    Wall,
 }

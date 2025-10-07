@@ -12,6 +12,7 @@ mod obstacle;
 mod player;
 mod shield;
 mod utils;
+mod wall;
 
 pub use bullet::*;
 pub use camera::*;
@@ -25,3 +26,4 @@ pub use obstacle::*;
 pub use player::*;
 pub use shield::*;
 pub use utils::*;
+pub use wall::*;
